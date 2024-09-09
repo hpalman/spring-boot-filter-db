@@ -272,3 +272,17 @@ Visit http://localhost:8080/h2-console to check the H2 database.
 Use the URL http://localhost:8080/log?data=YourDataHere to trigger the filter and log the data to the database.
 You should see the logged data in the LogEntry table in the H2 console.
 This project demonstrates how to capture data from HTTP requests using a Spring Boot filter and write that data to a database via the service and repository layers.
+
+# 수정사항
+@Configuration
+public class FilterConfig {
+
+    // @Bean
+    FilterRegistrationBean<LogFilter> logFilter() {
+        FilterRegistrationBean<LogFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new LogFilter());
+        registrationBean.addUrlPatterns("/log/*");  // Apply filter to specific URLs
+
+        return registrationBean;
+    }
+}
