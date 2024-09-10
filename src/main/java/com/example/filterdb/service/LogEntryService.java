@@ -16,8 +16,9 @@ public class LogEntryService {
     private LogEntryRepository logEntryRepository;
 
     public void saveLogEntry(String data) {
-    	log.info(data);
+    	log.info("■ {} I", data);
         LogEntry logEntry = new LogEntry(data);
         logEntryRepository.save(logEntry);
+    	log.info("■ {} O", data);
     }
 }

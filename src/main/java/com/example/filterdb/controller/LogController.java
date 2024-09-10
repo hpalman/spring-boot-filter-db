@@ -6,8 +6,13 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class LogController {
 
-    @GetMapping("/log")
+    @GetMapping("/non-filter/api") // /log
     public String logData() {
-        return "Data logged successfully!";
+        return "[non-filter] Data logged successfully!";
+    }
+
+    @GetMapping("/filter/api") // /nolog
+    public String noLogData() {
+        return "[/api/filter] Nolog Data logged successfully!";
     }
 }

@@ -1,0 +1,4 @@
+H2-console
+   URL> http://localhost:9090/h2-console
+   id > sa/1
+   cf > application.properties
