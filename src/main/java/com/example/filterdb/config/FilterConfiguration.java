@@ -11,6 +11,7 @@ import com.example.filterdb.service.LogEntryService;
 
 import lombok.extern.slf4j.Slf4j;
 
+
 // @Configuration
 // @Slf4j
 public class FilterConfiguration {
@@ -22,9 +23,8 @@ public class FilterConfiguration {
 	
 	필터에 대한 URL 패턴을 설정하려면 addUrlPatterns() 또는 setUrlPatterns() 메서드를 사용할 수 있습니다.
 	*/
-	// @Autowired
-    // private LogEntryService logEntryService;
-    @Bean
+
+	@Bean
     FilterRegistrationBean<LogFilter> loggingFilterRegistration(LogEntryService logEntryService) {
         FilterRegistrationBean<LogFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new LogFilter(logEntryService));
