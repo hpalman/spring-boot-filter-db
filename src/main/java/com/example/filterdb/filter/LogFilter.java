@@ -4,10 +4,14 @@ package com.example.filterdb.filter;
 //import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
+import com.example.filterdb.multidb.model.UserMySQL;
+import com.example.filterdb.multidb.model.UserPostgres;
+import com.example.filterdb.multidb.service.UserMySQLService;
 import com.example.filterdb.service.LogEntryService;
 
 import jakarta.servlet.Filter;
@@ -26,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
 //@WebFilter(urlPatterns = "/api/filter") //필터를 적용할 uri를 설정한다.
 // @ChatGPT 답 테스트
 @Slf4j
-@Component
+//@Component
 //@Order(1)
 //@WebFilter(
 //		urlPatterns = "/non-filter/*"
@@ -44,10 +48,14 @@ public class LogFilter implements Filter {
     //}
 	
     // @Autowired
-    private LogEntryService logEntryService;
+    //// private LogEntryService logEntryService;
+    //// public LogFilter(LogEntryService logEntryService) {
+    //// 	this.logEntryService = logEntryService;
+    //// }
 
-    public LogFilter(LogEntryService logEntryService) {
-    	this.logEntryService = logEntryService;
+    private UserMySQLService userMySQLService; 
+    public LogFilter(UserMySQLService userMySQLService) {
+    	this.userMySQLService = userMySQLService;
     }
     // 
     @Override // FilterConfig filterConfig
@@ -69,16 +77,30 @@ public class LogFilter implements Filter {
         log.info("■ doFilter I.");
     
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        String requestData = httpRequest.getParameter("data");
-    
-        if (requestData != null) {
-            logEntryService.saveLogEntry(requestData);  // Save to DB
-        }
+
+        String gid = MDC.get("GID");
+        String uri = httpRequest.getRequestURI();
+        //Long   id    = Long.parseLong( httpRequest.getParameter("id") );
+        //String name  = httpRequest.getParameter("name");
+        //String email = httpRequest.getParameter("email");
+        //UserMySQL user = new UserMySQL();
+        //user.setId(id);
+        //user.setName(name);
+        //user.setId(id);
+
+        //if (requestData != null) {
+            //// logEntryService.saveLogEntry(requestData);  // Save to DB
+            userMySQLService.log(gid, uri);
+        //}
     
         // Continue with the request
-        chain.doFilter(request, response);
-        
-        log.info("■ doFilter O.");
+        try {
+        	chain.doFilter(request, response);
+        } catch (Exception e) {
+        	throw e;
+        } finally {
+            log.info("■ doFilter O.");
+        }
     }
 
     @Override

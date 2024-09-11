@@ -19,9 +19,13 @@ import lombok.extern.slf4j.Slf4j;
  * 
  */
 @Slf4j
-@Component
-@Order(Ordered.HIGHEST_PRECEDENCE) // @Order 애노테이션을 사용하여 빈의 우선 순위를 설정할 때, 같은 우선 순위를 가진 빈들 간의 상대적인 순서는 보장되지 않는다.
+// @Component // FilterConfiguration에서 등록할 경우에는 이 어노테이션 제거 필요. 중복 빈 되기 때문
+//@Order(Ordered.HIGHEST_PRECEDENCE) // @Order 애노테이션을 사용하여 빈의 우선 순위를 설정할 때, 같은 우선 순위를 가진 빈들 간의 상대적인 순서는 보장되지 않는다.
 public class MDCLoggingFilter implements Filter {
+
+	public MDCLoggingFilter() {
+		
+	}
 
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <typeAlias alias="userMySQL"    type="com.example.filterdb.multidb.model.UserMySQL"    />
+        <typeAlias alias="userPostgres" type="com.example.filterdb.multidb.model.UserPostgres" />
+    </typeAliases>
+</configuration>

@@ -4,16 +4,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.stereotype.Component;
 
 import com.example.filterdb.filter.LogFilter;
+import com.example.filterdb.filter.MDCLoggingFilter;
 import com.example.filterdb.filter.RequestAndResponseLoggingFilter;
+import com.example.filterdb.multidb.service.UserMySQLService;
 import com.example.filterdb.service.LogEntryService;
 
 import lombok.extern.slf4j.Slf4j;
 
 
-// @Configuration
-// @Slf4j
+@Configuration
+@Slf4j
 public class FilterConfiguration {
    /*
     cf. https://www.baeldung.com/spring-autowire-bean-servlet-filter
@@ -25,23 +29,40 @@ public class FilterConfiguration {
 	*/
 
 	@Bean
-    FilterRegistrationBean<LogFilter> loggingFilterRegistration(LogEntryService logEntryService) {
+    FilterRegistrationBean<LogFilter> loggingFilterRegistration(UserMySQLService userMySQLService
+    		// LogEntryService logEntryService
+    		) {
         FilterRegistrationBean<LogFilter> registrationBean = new FilterRegistrationBean<>();
-        registrationBean.setFilter(new LogFilter(logEntryService));
-        registrationBean.addUrlPatterns("/non-filter/*");
-        registrationBean.setOrder(1);
+        registrationBean.setFilter(new LogFilter(
+        		// logEntryService
+        		userMySQLService
+        		));
+        registrationBean.addUrlPatterns("/api/*"); // "/api/postgres/*" // /non-filter/*
+        registrationBean.setOrder(100);
         return registrationBean;
     }
-    
+	
+	// private UserMySQLService userMySQLService;
+	
     @Bean
     FilterRegistrationBean<RequestAndResponseLoggingFilter> loggingRequestAndResponseLoggingFilterRegistration(LogEntryService logEntryService) {
         FilterRegistrationBean<RequestAndResponseLoggingFilter> registrationBean = new FilterRegistrationBean<>();
         registrationBean.setFilter(new RequestAndResponseLoggingFilter(logEntryService));
         registrationBean.addUrlPatterns("/filter/*");
-        registrationBean.setOrder(2);
+        registrationBean.setOrder(200);
         return registrationBean;
     }
 
+    @Bean
+    FilterRegistrationBean<MDCLoggingFilter> loggingMDCLoggingFilterRegistration() {
+    	log.info("Ordered.HIGHEST_PRECEDENCE {}", Ordered.HIGHEST_PRECEDENCE);
+        FilterRegistrationBean<MDCLoggingFilter> registrationBean = new FilterRegistrationBean<>();
+        registrationBean.setFilter(new MDCLoggingFilter());
+        registrationBean.addUrlPatterns("/*");
+        registrationBean.setOrder(1);
+        return registrationBean;
+    }
+    
     ///FilterRegistrationBean<LogFilter> logFilter() {
     ///	log.info("■ FilterConfiguration:logFilter 1");
     ///    FilterRegistrationBean<LogFilter> registrationBean = new FilterRegistrationBean<>();
