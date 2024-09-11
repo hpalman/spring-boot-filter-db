@@ -96,8 +96,8 @@ public class LogFilter implements Filter {
         // Continue with the request
         try {
         	chain.doFilter(request, response);
-        } catch (Exception e) {
-        	throw e;
+        //} catch (Exception e) {
+        //	throw e;
         } finally {
             log.info("■ doFilter O.");
         }
