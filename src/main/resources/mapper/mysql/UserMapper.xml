@@ -35,7 +35,7 @@
     </delete>
     
     <insert id="logInsert" parameterType="com.example.filterdb.multidb.model.UserLog" >
-        INSERT INTO log (gid, uri, dt) VALUES (#{gid}, #{uri}, to_char(NOW(),'YYYYMMDD HH24MISS'))
+        INSERT INTO tb_log (gid, uri, dt) VALUES (#{gid}, #{uri}, to_char(NOW(),'YYYYMMDD HH24MISS'))
     </insert>
     
 </mapper>
